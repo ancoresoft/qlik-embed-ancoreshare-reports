@@ -116,3 +116,7 @@ Skeletons cover initial loading. After 20 seconds a notice lets the Qlik UI stay
 ## Support
 
 Questions about ancoreShare: support@ancoresoft.com
+
+## License
+
+MIT, see [LICENSE](LICENSE). ancoreShare itself is licensed separately.
