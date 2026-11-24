@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Implementation Guide | ancoreShare + Qlik Embed</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --accent: #367bbf;
+        --accent-dark: #2d6ca9;
+        --ink: #262626;
+        --muted: #5f6b76;
+        --surface: #fff;
+        --background: #f5f7f8;
+        --border: #d9dee2;
+        --code: #edf3f5;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; color: var(--ink); background: var(--background); font-family: "Source Sans Pro", "Segoe UI", Arial, sans-serif; line-height: 1.55; }
+      .site-nav { position: sticky; top: 0; z-index: 2000; display: flex; gap: 4px; padding: 8px max(24px, calc((100% - 1000px) / 2)); background: #fff; border-bottom: 1px solid var(--border); }
+      .site-nav a { padding: 6px 10px; border-radius: 3px; color: var(--muted); font-size: 14px; font-weight: 600; text-decoration: none; }
+      .site-nav a:hover { color: var(--accent-dark); background: #e5f2f6; }
+      .site-nav a[aria-current="page"] { color: #fff; background: var(--accent); }
+      header { padding: 24px; color: #fff; background: #367bbf; }
+      .header-content, main { width: min(1000px, 100%); margin: 0 auto; }
+      .back { display: inline-block; margin-bottom: 18px; color: #fff; font-weight: 600; text-decoration: none; }
+      h1 { margin: 0 0 6px; font-size: 30px; }
+      header p { max-width: 760px; margin: 0; opacity: .94; }
+      main { padding: 28px 24px 48px; }
+      section { margin-bottom: 20px; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+      h2 { margin: 0 0 12px; font-size: 21px; }
+      h3 { margin: 20px 0 8px; font-size: 16px; }
+      p { margin: 0 0 14px; }
+      p:last-child, ul:last-child, ol:last-child { margin-bottom: 0; }
+      ul, ol { margin: 0 0 14px; padding-left: 22px; }
+      li + li { margin-top: 6px; }
+      .summary { border-left: 4px solid var(--accent); }
+      .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .comparison > div { padding: 16px; background: #f8fafb; border: 1px solid var(--border); border-radius: 4px; }
+      .label { margin-bottom: 6px; color: var(--accent-dark); font-size: 12px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; }
+      pre { margin: 14px 0; padding: 16px; overflow: auto; color: #20323a; background: var(--code); border-radius: 4px; font: 13px/1.5 Consolas, "Courier New", monospace; }
+      code { font-family: Consolas, "Courier New", monospace; }
+      a { color: var(--accent-dark); }
+      .button { display: inline-block; margin-top: 6px; padding: 10px 14px; color: #fff; background: var(--accent); border-radius: 4px; font-weight: 600; text-decoration: none; }
+      .button:hover { background: var(--accent-dark); }
+      @media (max-width: 700px) { .comparison { grid-template-columns: 1fr; } main { padding: 18px 14px 32px; } section { padding: 18px; } }
+    </style>
+  </head>
+  <body>
+    <nav class="site-nav" aria-label="Site navigation">
+      <a href="index.html">Overview</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="implementation-guide.html" aria-current="page">Guide</a>
+    </nav>
+    <header>
+      <div class="header-content">
+        <h1>ancoreShare + Qlik Embed</h1>
+        <p>Implementation guide for a Qlik Embed analytics page with an ancoreShare report window.</p>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h2>Run the Vite dashboard locally</h2>
+        <p>The dashboard uses React, TypeScript, Tailwind CSS and shadcn/ui. With Node.js 22.12 or newer installed, run <code>npm ci</code> and <code>npm run dev</code>, then open <code>http://localhost:8080/dashboard.html</code>.</p>
+        <p>Each Qlik object has a matching skeleton until its initial data connection is available. Slow connections and errors display a notice. Live data still requires the local origin and OAuth callback to be allowed in Qlik.</p>
+        <p>Run <code>npm test</code> and <code>npm run build</code> to validate the app. Your hosting publishes the resulting <code>dist/</code> directory, including the unchanged report runtime and OAuth callback URLs.</p>
+      </section>
+      <section class="summary">
+        <h2>What this demo shows</h2>
+        <p>The analytics page is rendered with Qlik Embed. The six KPIs, chart and table embed the existing Qlik sheet objects. Two ancoreShare buttons, Sales Report and Current Selections + Variable, are rendered with the Capability API inside a floating report window.</p>
+        <a class="button" href="dashboard.html">Open the live demo</a>
+      </section>
+
+      <section>
+        <h2>How are the report buttons embedded?</h2>
+        <div class="comparison">
+          <div>
+            <div class="label">Qlik Embed analytics/chart</div>
+            <p>Designed for supported Nebula visualizations. It is the right choice for a modern embedded analytics interface.</p>
+          </div>
+          <div>
+            <div class="label">ancoreShare</div>
+            <p>An extension that depends on the Qlik extension and Capability API runtime to initialize its report actions.</p>
+          </div>
+        </div>
+        <p>Qlik documents that <code>analytics/chart</code> renders Nebula visualizations. Qlik also documents extensions as supported through <code>classic/app</code>, <code>classic/chart</code> with <code>iframe="true"</code>, Capability APIs, or iFrame embedding. Therefore, direct use of an ancoreShare extension with <code>analytics/chart</code> is not a supported integration path and can render without providing the extension behavior.</p>
+        <p>The pattern used here preserves Qlik Embed for analytics while isolating the legacy Capability API runtime inside an iframe only for the ancoreShare buttons.</p>
+      </section>
+
+      <section>
+        <h2>Implementation steps</h2>
+        <h3>1. Embed the analytics objects</h3>
+        <p>Load Qlik Embed with your OAuth SPA client. Give every embedded object the same app ID and session identity.</p>
+        <pre><code>&lt;qlik-embed
+  ui="analytics/chart"
+  app-id="&lt;app-id&gt;"
+  object-id="&lt;chart-object-id&gt;"
+  identity="reporting-session"&gt;
+&lt;/qlik-embed&gt;</code></pre>
+
+        <h3>2. Embed the report buttons in a report window</h3>
+        <p>Place a same-origin iframe inside a compact, non-modal report window. Keep the dashboard interactive outside the window, show the title and variable value only in the window header, and keep the iframe mounted when hidden. Pass the same session identity to the Capability API page.</p>
+        <pre><code>&lt;iframe
+  id="report-frame"
+  title="ancoreShare Reports"
+  src="api.html?identity=reporting-session"&gt;
+&lt;/iframe&gt;</code></pre>
+
+        <h3>3. Open the same app through the Capability API</h3>
+        <p>In the iframe page, load RequireJS and <code>js/qlik</code>, then open the same app with the matching identity and Web Integration ID.</p>
+        <pre><code>const config = {
+  host: "&lt;tenant&gt;.qlikcloud.com",
+  prefix: "/",
+  port: 443,
+  isSecure: true,
+  webIntegrationId: "&lt;web-integration-id&gt;",
+  identity: "reporting-session"
+};
+
+// Required by ancoreShare's own export authentication:
+window.config = config;
+
+const app = qlik.openApp("&lt;app-id&gt;", config);
+app.getObject("report-button", "dRenfA");
+app.getObject("context-report-button", "CJjxGy");</code></pre>
+
+        <h3>4. Transfer the dashboard context</h3>
+        <p>Both pages use the same Qlik tenant, app ID, authenticated user, and identity. Before the report buttons are shown, the dashboard sends its active selections and <code>vTest</code> to the iframe. The initial transfer clears the Capability API session, applies the selections, and sets the variable. While the floating window remains mounted, a Qlik selection object watches for changes and committed variable updates trigger a new transfer. Typing in the input alone does not change the report; use Apply. Subsequent transfers update only changed fields and variables, including clearing fields removed from the selection.</p>
+
+        <p>Updates are debounced and serialized. The host checks the iframe source, origin and request ID, and updates the title only after acknowledgement. Identical snapshots are ignored to avoid feedback loops from a shared Engine session. The report buttons are temporarily covered while context is updating; the dashboard stays interactive. The iframe is kept mounted without a reload or a new login.</p>
+
+        <h3>5. Establish the legacy report session</h3>
+        <p>The Qlik Embed objects use OAuth SPA. The ancoreShare extension's legacy Reporting API calls use the interactive Qlik session from the Web Integration. Before loading the extension, call <code>/api/v1/users/me</code> with credentials and the Web Integration ID. If Qlik returns <code>401</code> or <code>403</code>, show an explicit new-tab sign-in link. After signing in with the same account, the user chooses Try again to remount only <code>api.html?identity=…</code>. The login provider can refuse iframe embedding, so do not navigate an embedded report to the login page or redirect the dashboard. A directly opened report page can still use a normal top-level login redirect.</p>
+        <p><strong>Expose <code>window.config</code> before loading ancoreShare.</strong> Its native <code>setQlikHeaders()</code> reads <code>window.config.webIntegrationId</code> to obtain the CSRF token for its export requests. A top-level <code>const config</code> does not create this window property. Omitting the explicit assignment can leave the dashboard working while report exports fail with <code>401</code> and “No Qlik Printing Service”.</p>
+        <p><code>getObject()</code> can resolve before the extension runtime has finished loading. Wait for <code>ancoreSoft.setQlikHeaders</code>, await its initialization, and validate the CSRF token and Web Integration ID before announcing readiness. The implemented bounded wait is in <code>public/api.html</code>. Do not send authentication tokens in context messages.</p>
+      </section>
+
+      <section>
+        <h2>Permission and sign-in failures</h2>
+        <p>The dashboard listens to <code>qlik-embed:error</code> as well as connection promise rejections. An explicit app access-denied error replaces the charts and report controls with one English message. Network errors remain connection errors; a slow response alone is not treated as a permissions failure.</p>
+        <p>The report iframe uses a separate cookie-based Qlik session. A successful OAuth dashboard sign-in does not establish that report session. An unauthenticated iframe notifies the dashboard to replace the loading overlay with English sign-in instructions. The user opens Qlik in a new tab and retries only the report iframe; the dashboard remains interactive and keeps its selections. Use the same account for both sessions.</p>
+        <p>If the iframe never announces readiness, a 30-second startup timeout replaces the skeleton with recovery actions. This can indicate a blocked sign-in frame, third-party cookie restrictions, network issues, or an unavailable extension; it does not by itself identify the cause. A new-tab sign-in cannot override a browser policy that blocks cross-site cookies. If the Qlik hub is accessible but the report frame still receives 401, compare a regular browser window with private browsing and inspect the request's Cookies tab for excluded or blocked cookies. Do not assume every 401 proves a cookie block, or change app permissions to solve a session failure. For diagnosis, check the report frame's <code>/api/v1/users/me</code> response, WebSocket errors and the browser console. Do not share session cookies or access tokens.</p>
+      </section>
+
+      <section>
+        <h2>Appearance and Qlik objects</h2>
+        <p>The dashboard mirrors the existing Sales Dashboard sheet. Its six KPI objects, chart and table are embedded by object ID; there are no copied totals or changes to the Qlik app. The surrounding page uses blue <code>#367BBF</code>, red <code>#DA3832</code>, white cards and grey dividers. Report button styling is scoped to the iframe's <code>.report-object</code> containers.</p>
+        <p>Keep the report container measurable during loading with <code>visibility: hidden</code>, and reserve its full 64-pixel height. Avoid global <code>header</code> styles in the iframe: they also affect Qlik's internal object header and can squeeze the button until its caption is clipped. The second embedded report, <code>CJjxGy</code>, is labelled “Current Selections + Variable” and receives the same synchronized context. The floating window retains enough height for the native export progress dialog.</p>
+      </section>
+      <section>
+        <h2>Required Qlik configuration</h2>
+        <ul>
+          <li>A Qlik Cloud app containing the analytics objects and ancoreShare report button objects.</li>
+          <li>An OAuth 2.0 SPA client for Qlik Embed, with the host page callback URL and origin configured.</li>
+          <li>A Web Integration that allows the host page origin for the Capability API iframe.</li>
+          <li>An interactive Qlik browser session available to the legacy Capability API and ancoreShare requests. Browsers must permit this cookie-based session.</li>
+          <li>Access to the app and ancoreShare extension for the signed-in Qlik user.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Official Qlik documentation</h2>
+        <ul>
+          <li><a href="https://qlik.dev/embed/qlik-embed/quickstart/qlik-embed-webcomponent-quickstart/" target="_blank" rel="noopener noreferrer">Qlik Embed web components quick start</a></li>
+          <li><a href="https://qlik.dev/embed/foundational-knowledge/visualizations/" target="_blank" rel="noopener noreferrer">Supported visualizations and extension support</a></li>
+          <li><a href="https://qlik.dev/embed/capability-api/" target="_blank" rel="noopener noreferrer">Capability APIs for mashups</a></li>
+          <li><a href="https://qlik.dev/authenticate/oauth/create/create-oauth-client-spa/" target="_blank" rel="noopener noreferrer">Create an OAuth SPA client</a></li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

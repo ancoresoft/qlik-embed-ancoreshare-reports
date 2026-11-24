@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ancoreShare + Qlik Embed</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --accent: #367bbf;
+        --accent-dark: #2d6ca9;
+        --ink: #404040;
+        --muted: #666;
+        --surface: #fff;
+        --background: #f5f7f8;
+        --border: #d9dee2;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: "Source Sans Pro", "Segoe UI", Arial, sans-serif; color: var(--ink); background: var(--background); }
+      .site-nav { position: sticky; top: 0; z-index: 2000; display: flex; gap: 4px; padding: 8px max(24px, calc((100% - 1100px) / 2)); background: #fff; border-bottom: 1px solid var(--border); }
+      .site-nav a { padding: 6px 10px; color: var(--muted); border-radius: 3px; font-size: 14px; font-weight: 600; text-decoration: none; }
+      .site-nav a:hover { color: var(--accent-dark); background: #e5f2f6; }
+      .site-nav a[aria-current="page"] { color: #fff; background: var(--accent); }
+      header { padding: 24px; border-bottom: 1px solid var(--border); background: var(--surface); }
+      .hero-content, main { width: min(1100px, 100%); margin: 0 auto; }
+      h1 { margin: 0 0 6px; font-size: 28px; }
+      header p { max-width: 760px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+      main { padding: 24px; }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+      .card { display: flex; flex-direction: column; min-height: 250px; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+      h2 { margin: 0 0 10px; font-size: 19px; }
+      .card p { margin: 0 0 18px; color: var(--muted); line-height: 1.5; }
+      .tag { align-self: flex-start; margin-bottom: 18px; padding: 5px 9px; color: var(--accent-dark); background: #e5f2f6; border-radius: 999px; font-size: 12px; font-weight: bold; }
+      .button { display: block; margin-top: auto; padding: 12px 16px; color: #fff; background: var(--accent); border-radius: 4px; text-align: center; text-decoration: none; font-weight: 600; }
+      .button:hover { background: var(--accent-dark); }
+      .button.secondary { color: var(--accent-dark); background: #fff; border: 1px solid var(--accent); }
+      .button.secondary:hover { background: #e5f2f6; }
+      @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <nav class="site-nav" aria-label="Site navigation">
+      <a href="index.html" aria-current="page">Overview</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="implementation-guide.html">Guide</a>
+    </nav>
+    <header>
+      <div class="hero-content">
+        <h1>ancoreShare + Qlik Embed</h1>
+        <p>A Qlik Embed dashboard with six live KPIs, shared selections and variables, and two reports in a floating window.</p>
+      </div>
+    </header>
+
+    <main>
+      <div class="grid">
+        <article class="card">
+          <h2>Try the mashup</h2>
+          <span class="tag">Live demo</span>
+          <p>Explore the sales KPIs, select regions and products, and open Reports to export the current dashboard context.</p>
+          <a class="button" href="dashboard.html">Open demo</a>
+        </article>
+        <article class="card">
+          <h2>Implementation guide</h2>
+          <span class="tag">Technical tutorial</span>
+          <p>Learn how Qlik Embed analytics and Capability API reports share selections and variables across their authenticated sessions.</p>
+          <a class="button secondary" href="implementation-guide.html">Read the guide</a>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "routes": [],
+  "globalHeaders": {
+    "Cache-Control": "no-store"
+  }
+}

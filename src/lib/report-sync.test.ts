@@ -1,0 +1,72 @@
+import { afterEach, expect, it, vi } from "vitest";
+import { createReportSync } from "./report-sync";
+import type { ReportContext } from "./selection-context";
+afterEach(() => vi.useRealTimers());
+function context(value: number, requestId = String(value)): ReportContext {
+  return { type: "ancoreShare:setContext", requestId, appId: "app", selections: [], variables: { vTest: value } };
+}
+it("coalesces changes, waits for matching acknowledgement and ignores shared-session echoes", async () => {
+  vi.useFakeTimers();
+  let current = context(1);
+  const options = { read: vi.fn(async () => current), send: vi.fn(), busy: vi.fn(), applied: vi.fn(), error: vi.fn() };
+  const sync = createReportSync(options);
+  sync.request();
+  await vi.advanceTimersByTimeAsync(200);
+  expect(options.send).not.toHaveBeenCalled();
+  sync.ready();
+  await vi.advanceTimersByTimeAsync(200);
+  expect(options.send).toHaveBeenCalledTimes(1);
+  current = context(2); sync.request();
+  current = context(3); sync.request();
+  await vi.advanceTimersByTimeAsync(200);
+  expect(options.send).toHaveBeenCalledTimes(1);
+  sync.acknowledge("stale");
+  expect(options.applied).not.toHaveBeenCalled();
+  sync.acknowledge("1");
+  await vi.advanceTimersByTimeAsync(200);
+  expect(options.send).toHaveBeenLastCalledWith(context(3));
+  sync.acknowledge("3");
+  expect(options.applied).toHaveBeenLastCalledWith(3, "3");
+  current = context(3, "echo"); sync.request();
+  await vi.advanceTimersByTimeAsync(200);
+  expect(options.send).toHaveBeenCalledTimes(2);
+  expect(options.applied).toHaveBeenLastCalledWith(3, "3");
+  expect(options.error).not.toHaveBeenCalled();
+  sync.dispose();
+});
+
+it("holds context updates during a report and resumes with the latest value", async () => {
+  vi.useFakeTimers();
+  let current = context(1);
+  const options = { read: vi.fn(async () => current), send: vi.fn(), busy: vi.fn(), applied: vi.fn(), error: vi.fn() };
+  const sync = createReportSync(options);
+  sync.ready(); sync.request();
+  await vi.advanceTimersByTimeAsync(200);
+  sync.acknowledge("1");
+  sync.pause();
+  options.busy.mockClear();
+  current = context(2); sync.request();
+  current = context(3); sync.request();
+  await vi.advanceTimersByTimeAsync(1000);
+  expect(options.send).toHaveBeenCalledTimes(1);
+  expect(options.busy).not.toHaveBeenCalled();
+  sync.resume();
+  await vi.advanceTimersByTimeAsync(200);
+  expect(options.send).toHaveBeenLastCalledWith(context(3));
+  sync.dispose();
+});
+it("discards a snapshot invalidated while reading and cancels pending work on disposal", async () => {
+  vi.useFakeTimers();
+  let resolve!: (context: ReportContext) => void;
+  const options = { read: vi.fn().mockImplementationOnce(() => new Promise(r => { resolve = r; })).mockResolvedValue(context(2)), send: vi.fn(), busy: vi.fn(), applied: vi.fn(), error: vi.fn() };
+  const sync = createReportSync(options);
+  sync.ready(); sync.request();
+  await vi.advanceTimersByTimeAsync(200);
+  sync.request(); resolve(context(1));
+  await vi.advanceTimersByTimeAsync(200);
+  expect(options.send).toHaveBeenCalledExactlyOnceWith(context(2));
+  sync.request(); sync.dispose();
+  await vi.advanceTimersByTimeAsync(31000);
+  expect(options.send).toHaveBeenCalledTimes(1);
+  expect(options.error).not.toHaveBeenCalled();
+});

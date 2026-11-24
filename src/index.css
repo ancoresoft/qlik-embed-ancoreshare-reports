@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: "Segoe UI", Arial, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: #fff;
+  --color-secondary: #f0f4f8;
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: #e9edf1;
+  --color-muted-foreground: #637184;
+  --color-accent: #eef4fa;
+  --color-accent-foreground: var(--primary);
+  --color-destructive: #da3832;
+  --color-border: #dce1e7;
+  --color-input: #dce1e7;
+  --color-ring: var(--primary);
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+}
+
+:root {
+  font-family: var(--font-sans);
+  color-scheme: light;
+  --background: #f3f5f7;
+  --foreground: #405160;
+  --card: #fff;
+  --primary: #367bbf;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply m-0 bg-background text-foreground antialiased;
+  }
+  button:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+  a:focus-visible,
+  summary:focus-visible {
+    @apply outline-2 outline-offset-4 outline-ring;
+  }
+}
+
+.qlik-mount,
+.qlik-mount qlik-embed {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  display: block;
+}
+.qlik-mount[hidden] {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
