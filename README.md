@@ -8,6 +8,10 @@ Built with Vite, React, TypeScript, Tailwind CSS and shadcn/ui. The saved Qlik a
 
 Qlik Embed does not render third-party extensions such as ancoreShare. This mashup therefore loads the ancoreShare report objects through the Capability API in a same-origin iframe (`public/api.html`). The dashboard transfers active selections and the variable value explicitly to that iframe before the report buttons become available. No temporary or public bookmarks are needed.
 
+![How Qlik Embed, the Capability API and ancoreShare work together](docs/qlik-embed-ancoreshare-overview.png)
+
+The same picture as vector graphic: [docs/qlik-embed-ancoreshare-overview.svg](docs/qlik-embed-ancoreshare-overview.svg)
+
 ## Prerequisites
 
 - A Qlik Cloud tenant with the app you want to embed.

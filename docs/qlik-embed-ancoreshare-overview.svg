@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="880" viewBox="0 0 1280 880" font-family="Arial, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#243E56"/>
+    </marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#DA3832"/>
+    </marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2E8B57"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="880" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="40" y="52" font-size="28" font-weight="bold" fill="#243E56">Qlik Embed and ancoreShare: how the pieces fit together</text>
+  <text x="40" y="82" font-size="16" fill="#5A6B7B">One Qlik app, two ways into it. The mashup keeps both in sync, so the report uses the user's current selections.</text>
+
+  <!-- Browser -->
+  <rect x="40" y="110" width="640" height="510" rx="12" fill="#F5F7F8" stroke="#C9D1D8" stroke-width="1.5"/>
+  <circle cx="64" cy="134" r="5" fill="#DA3832"/><circle cx="82" cy="134" r="5" fill="#F2B233"/><circle cx="100" cy="134" r="5" fill="#2E8B57"/>
+  <text x="120" y="139" font-size="15" font-weight="bold" fill="#243E56">Browser: your mashup web page</text>
+
+  <!-- Lane A: Qlik Embed -->
+  <rect x="70" y="160" width="580" height="170" rx="8" fill="#FFFFFF" stroke="#367BBF" stroke-width="2"/>
+  <text x="90" y="190" font-size="18" font-weight="bold" fill="#367BBF">Qlik Embed</text>
+  <text x="90" y="214" font-size="14" fill="#243E56">Shows native Qlik objects inside your page: KPIs, charts, tables.</text>
+  <text x="90" y="234" font-size="14" fill="#DA3832">Cannot show third-party extensions such as ancoreShare.</text>
+  <rect x="90" y="252" width="110" height="56" rx="4" fill="#E5F2F6"/><text x="145" y="285" font-size="13" text-anchor="middle" fill="#243E56">KPI</text>
+  <rect x="212" y="252" width="150" height="56" rx="4" fill="#E5F2F6"/><text x="287" y="285" font-size="13" text-anchor="middle" fill="#243E56">Chart</text>
+  <rect x="374" y="252" width="150" height="56" rx="4" fill="#E5F2F6"/><text x="449" y="285" font-size="13" text-anchor="middle" fill="#243E56">Table</text>
+  <circle cx="620" cy="190" r="15" fill="#243E56"/><text x="620" y="196" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">1</text>
+
+  <!-- Context transfer between lanes -->
+  <line x1="300" y1="334" x2="300" y2="414" stroke="#2E8B57" stroke-width="2.5" marker-end="url(#ag)"/>
+  <line x1="380" y1="414" x2="380" y2="334" stroke="#2E8B57" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ag)"/>
+  <circle cx="270" cy="374" r="15" fill="#2E8B57"/><text x="270" y="380" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">2</text>
+  <text x="398" y="364" font-size="14" font-weight="bold" fill="#2E8B57">Selections + variables</text>
+  <text x="398" y="384" font-size="13" fill="#2E8B57">passed by the mashup, confirmed back</text>
+
+  <!-- Lane B: Capability API -->
+  <rect x="70" y="420" width="580" height="180" rx="8" fill="#FFFFFF" stroke="#DA3832" stroke-width="2"/>
+  <text x="90" y="450" font-size="18" font-weight="bold" fill="#DA3832">Report window: Capability API</text>
+  <text x="90" y="474" font-size="14" fill="#243E56">A small page (api.html) in an iframe of the same web page.</text>
+  <text x="90" y="494" font-size="14" fill="#243E56">It loads the ancoreShare report objects from the same Qlik app.</text>
+  <rect x="90" y="520" width="200" height="44" rx="4" fill="#367BBF"/><text x="190" y="547" font-size="14" text-anchor="middle" fill="#FFFFFF">Show Reports Dialog</text>
+  <rect x="306" y="520" width="160" height="44" rx="4" fill="#367BBF"/><text x="386" y="547" font-size="14" text-anchor="middle" fill="#FFFFFF">1-Click Report</text>
+  <circle cx="620" cy="450" r="15" fill="#243E56"/><text x="620" y="456" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">3</text>
+  <circle cx="500" cy="542" r="15" fill="#243E56"/><text x="500" y="548" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">4</text>
+
+  <!-- Qlik Cloud -->
+  <rect x="820" y="110" width="420" height="510" rx="12" fill="#EEF5FB" stroke="#367BBF" stroke-width="1.5"/>
+  <text x="844" y="139" font-size="15" font-weight="bold" fill="#243E56">Qlik Cloud tenant</text>
+
+  <rect x="844" y="160" width="372" height="270" rx="8" fill="#FFFFFF" stroke="#243E56" stroke-width="1.5"/>
+  <text x="864" y="190" font-size="18" font-weight="bold" fill="#243E56">Qlik app</text>
+  <text x="864" y="212" font-size="14" fill="#5A6B7B">Data model and Qlik engine</text>
+  <rect x="864" y="228" width="332" height="62" rx="6" fill="#E5F2F6" stroke="#367BBF"/>
+  <text x="880" y="254" font-size="14" font-weight="bold" fill="#367BBF">Native objects</text>
+  <text x="880" y="274" font-size="13" fill="#243E56">KPIs, charts, tables</text>
+  <rect x="864" y="302" width="332" height="62" rx="6" fill="#FBEAEA" stroke="#DA3832"/>
+  <text x="880" y="328" font-size="14" font-weight="bold" fill="#DA3832">ancoreShare report objects</text>
+  <text x="880" y="348" font-size="13" fill="#243E56">Report buttons, report definitions</text>
+  <text x="864" y="402" font-size="13" fill="#5A6B7B">Each session has its own selections.</text>
+  <text x="864" y="420" font-size="13" fill="#5A6B7B">They are not shared automatically.</text>
+
+  <rect x="844" y="450" width="372" height="150" rx="8" fill="#FFFFFF" stroke="#8A99A8" stroke-dasharray="6 4"/>
+  <text x="864" y="478" font-size="15" font-weight="bold" fill="#243E56">Set up once by the Qlik admin</text>
+  <text x="864" y="506" font-size="14" fill="#243E56">• OAuth client (single-page app)</text>
+  <text x="878" y="524" font-size="13" fill="#5A6B7B">for Qlik Embed</text>
+  <text x="864" y="550" font-size="14" fill="#243E56">• Web Integration for the mashup address</text>
+  <text x="878" y="568" font-size="13" fill="#5A6B7B">for the Capability API</text>
+  <text x="864" y="590" font-size="14" fill="#243E56">• ancoreShare extension with licence</text>
+
+  <!-- Session arrows -->
+  <line x1="654" y1="259" x2="860" y2="259" stroke="#367BBF" stroke-width="2.5" marker-start="url(#ab)" marker-end="url(#ab)"/>
+  <text x="666" y="238" font-size="14" font-weight="bold" fill="#367BBF">Session 1</text>
+  <text x="666" y="282" font-size="12" fill="#243E56">OAuth sign-in</text>
+
+  <line x1="654" y1="470" x2="860" y2="335" stroke="#DA3832" stroke-width="2.5" marker-start="url(#ar)" marker-end="url(#ar)"/>
+  <text x="672" y="530" font-size="14" font-weight="bold" fill="#DA3832">Session 2</text>
+  <text x="672" y="550" font-size="12" fill="#243E56">Qlik cookie +</text>
+  <text x="672" y="566" font-size="12" fill="#243E56">Web Integration</text>
+
+  <!-- Steps -->
+  <text x="40" y="668" font-size="18" font-weight="bold" fill="#243E56">What happens</text>
+  <g font-size="14" fill="#243E56">
+    <rect x="40" y="684" width="290" height="104" rx="8" fill="#F5F7F8"/>
+    <circle cx="66" cy="710" r="14" fill="#243E56"/><text x="66" y="715" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">1</text>
+    <text x="90" y="715">The user selects data in the</text>
+    <text x="58" y="739">dashboard. These selections</text>
+    <text x="58" y="759">live in Session 1.</text>
+
+    <rect x="340" y="684" width="290" height="104" rx="8" fill="#F5F7F8"/>
+    <circle cx="366" cy="710" r="14" fill="#2E8B57"/><text x="366" y="715" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">2</text>
+    <text x="390" y="715">The mashup sends the</text>
+    <text x="358" y="739">selections and variables to</text>
+    <text x="358" y="759">the report window.</text>
+
+    <rect x="640" y="684" width="290" height="104" rx="8" fill="#F5F7F8"/>
+    <circle cx="666" cy="710" r="14" fill="#243E56"/><text x="666" y="715" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">3</text>
+    <text x="690" y="715">The report window applies</text>
+    <text x="658" y="739">them in Session 2 and confirms.</text>
+    <text x="658" y="759">Only then are the buttons active.</text>
+
+    <rect x="940" y="684" width="300" height="104" rx="8" fill="#F5F7F8"/>
+    <circle cx="966" cy="710" r="14" fill="#243E56"/><text x="966" y="715" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">4</text>
+    <text x="990" y="715">The user clicks a report.</text>
+    <text x="958" y="739">ancoreShare creates it with</text>
+    <text x="958" y="759">exactly these selections.</text>
+  </g>
+
+  <rect x="40" y="808" width="1200" height="50" rx="8" fill="#E5F2F6"/>
+  <text x="60" y="839" font-size="15" fill="#243E56"><tspan font-weight="bold">Key point:</tspan> two sessions on the same app. The mashup passes the selections over explicitly, so no temporary or public bookmark is needed.</text>
+</svg>
